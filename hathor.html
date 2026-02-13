@@ -1,0 +1,775 @@
+
+html_content = """<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏨 Hotel Hathor Concordia - Asistente Virtual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '🏨';
+            font-size: 60px;
+            display: block;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .status {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        
+        .status::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .content {
+            padding: 25px;
+        }
+        
+        .intro {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .buttons-grid {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .btn {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+        
+        .btn-text {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .btn-subtext {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 400;
+            display: block;
+            margin-top: 2px;
+        }
+        
+        /* Colores específicos */
+        .btn-precios { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .btn-habitaciones { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .btn-servicios { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .btn-ubicacion { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .btn-pagos { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; }
+        .btn-condiciones { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; }
+        .btn-checkin { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        
+        .btn-reserva {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            font-size: 18px;
+            padding: 20px;
+            margin-top: 10px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(255,107,107,0.5); }
+            to { box-shadow: 0 0 20px rgba(255,107,107,0.8), 0 0 30px rgba(255,107,107,0.6); }
+        }
+        
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ddd, transparent);
+            margin: 20px 0;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .footer a {
+            color: #2a5298;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        /* Modal para información detallada */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-size: 18px;
+            margin: 0;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+        
+        .close-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .modal-body {
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .modal-body h3 {
+            color: #2a5298;
+            margin: 15px 0 10px 0;
+            font-size: 16px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+        }
+        
+        .modal-body ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .modal-body li {
+            margin-bottom: 5px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+        }
+        
+        .price-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        
+        .whatsapp-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #25d366;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        .whatsapp-btn:hover {
+            background: #128c7e;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 0;
+            }
+            body {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Hotel Hathor Concordia</h1>
+            <p>Asistente Virtual 24/7</p>
+            <div class="status">En línea</div>
+        </div>
+        
+        <div class="content">
+            <div class="intro">
+                👋 ¡Hola! Soy tu asistente virtual. Selecciona una opción para obtener información instantánea. Para reservas, te conectaré con recepción.
+            </div>
+            
+            <div class="buttons-grid">
+                <button class="btn btn-precios" onclick="openModal('precios')">
+                    <span class="btn-icon">💵</span>
+                    <span class="btn-text">
+                        Ver Tarifas
+                        <span class="btn-subtext">Single, Doble, Triple, Cuádruple</span>
+                    </span>
+                </button>
+                
+                <button class="btn btn-habitaciones" onclick="openModal('habitaciones')">
+                    <span class="btn-icon">🛏️</span>
+                    <span class="btn-text">
+                        Tipos de Habitaciones
+                        <span class="btn-subtext">Estudio, Estándar, Superior, Suite</span>
+                    </span>
+                </button>
+                
+                <button class="btn btn-servicios" onclick="openModal('servicios')">
+                    <span class="btn-icon">✨</span>
+                    <span class="btn-text">
+                        Servicios Incluidos
+                        <span class="btn-subtext">Desayuno, piscinas, gym, WiFi...</span>
+                    </span>
+                </button>
+                
+                <button class="btn btn-ubicacion" onclick="openModal('ubicacion')">
+                    <span class="btn-icon">📍</span>
+                    <span class="btn-text">
+                        Ubicación y Contacto
+                        <span class="btn-subtext">Cómo llegar y teléfonos</span>
+                    </span>
+                </button>
+                
+                <button class="btn btn-pagos" onclick="openModal('pagos')">
+                    <span class="btn-icon">💳</span>
+                    <span class="btn-text">
+                        Formas de Pago
+                        <span class="btn-subtext">Tarjetas, QR, transferencia</span>
+                    </span>
+                </button>
+                
+                <button class="btn btn-condiciones" onclick="openModal('condiciones')">
+                    <span class="btn-icon">📋</span>
+                    <span class="btn-text">
+                        Condiciones y Políticas
+                        <span class="btn-subtext">Check-in/out, cancelaciones</span>
+                    </span>
+                </button>
+                
+                <button class="btn btn-checkin" onclick="openModal('checkin')">
+                    <span class="btn-icon">📝</span>
+                    <span class="btn-text">
+                        Check-in Online
+                        <span class="btn-subtext">Completar ficha anticipada</span>
+                    </span>
+                </button>
+                
+                <div class="divider"></div>
+                
+                <a href="https://wa.me/5434564222362?text=¡Hola!%20Vengo%20del%20asistente%20virtual%20y%20quiero%20hacer%20una%20reserva.%20Mis%20datos:%20Nombre:%20[COMPLETAR],%20Fecha%20de%20ingreso:%20[COMPLETAR],%20Fecha%20de%20salida:%20[COMPLETAR],%20Tipo%20de%20habitación:%20[COMPLETAR],%20Cantidad%20de%20pasajeros:%20[COMPLETAR]" class="btn btn-reserva" target="_blank">
+                    <span class="btn-icon">🔴</span>
+                    <span class="btn-text">
+                        QUIERO RESERVAR AHORA
+                        <span class="btn-subtext">Te atiende recepción personalmente</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🏨 Ruta Nacional 14 - Km 264.5, Concordia, Entre Ríos</p>
+            <p>📞 <a href="tel:+5434564222362">03456-4222362</a> | Int. 305</p>
+            <p>🌐 <a href="https://www.hathorconcordia.com.ar" target="_blank">www.hathorconcordia.com.ar</a></p>
+        </div>
+    </div>
+
+    <!-- Modales -->
+    <div id="modal-precios" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>💵 Tarifas por Noche (IVA incluido)</h2>
+                <button class="close-btn" onclick="closeModal('precios')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="highlight">
+                    ⚠️ Las tarifas pueden variar según la fecha de consulta y cotización del dólar.
+                </div>
+                
+                <h3>🧍 Habitación Single</h3>
+                <ul>
+                    <li>Estudio: Consultar precio</li>
+                    <li>Estándar: Consultar precio</li>
+                    <li>Superior: Consultar precio</li>
+                </ul>
+                
+                <h3>👫 Habitación Doble</h3>
+                <ul>
+                    <li>Estudio: Consultar precio</li>
+                    <li>Estándar: Consultar precio</li>
+                    <li>Superior: Consultar precio</li>
+                </ul>
+                
+                <h3>👨‍👩‍👧 Habitación Triple</h3>
+                <ul>
+                    <li>Estudio: Consultar precio</li>
+                    <li>Estándar: Consultar precio</li>
+                    <li>Superior: Consultar precio</li>
+                </ul>
+                
+                <h3>👨‍👩‍👧‍👦 Habitación Cuádruple</h3>
+                <ul>
+                    <li>Estudio: Consultar precio</li>
+                    <li>Estándar: Consultar precio</li>
+                    <li>Superior: Consultar precio</li>
+                </ul>
+                
+                <div class="highlight">
+                    💡 <strong>Promociones:</strong><br>
+                    • QR o Débito: 10% de descuento<br>
+                    • Tarjeta extranjera: 21% de descuento (IVA)<br>
+                    • 3 cuotas sin interés con Visa, Mastercard y Amex (montos > $130.000)
+                </div>
+                
+                <a href="https://wa.me/5434564222362?text=Hola,%20quiero%20consultar%20tarifas%20actualizadas%20para%20[fecha]%20-%20Habitación:%20[tipo]" class="whatsapp-btn" target="_blank">
+                    📱 Consultar precios actualizados por WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-habitaciones" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🛏️ Tipos de Habitaciones</h2>
+                <button class="close-btn" onclick="closeModal('habitaciones')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>🏢 Estudio (Piso -1)</h3>
+                <ul>
+                    <li>Cama matrimonial 2.2m o 2 twin 0.9m</li>
+                    <li>Aire acondicionado split frío/calor</li>
+                    <li>Frigobar</li>
+                    <li>Vista interna</li>
+                </ul>
+                
+                <h3>🏢 Estándar (Pisos 0° a 2°)</h3>
+                <ul>
+                    <li>Cama matrimonial 2.2m o 2 twin 0.9m</li>
+                    <li>Aire frío/calor centralizado</li>
+                    <li>Frigobar</li>
+                    <li>Vista a la Ruta</li>
+                </ul>
+                
+                <h3>⭐ Superior (Pisos 0° a 2°)</h3>
+                <ul>
+                    <li>Cama matrimonial 2.2m o 2 twin 0.9m</li>
+                    <li>Aire frío/calor centralizado</li>
+                    <li>Frigobar</li>
+                    <li>Bandeja con tetera, café y té</li>
+                    <li>Vista a los campos de arándanos</li>
+                </ul>
+                
+                <h3>👑 Suite</h3>
+                <ul>
+                    <li>Sala de estar independiente</li>
+                    <li>Bañera con hidromasaje</li>
+                    <li>Cama King size</li>
+                    <li>LCD</li>
+                    <li>Bandeja con tetera, café y té</li>
+                </ul>
+                
+                <div class="highlight">
+                    📌 Todas las habitaciones incluyen: Amenities, secador de pelo, caja de seguridad, TV con DirecTV.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-servicios" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✨ Servicios Incluidos</h2>
+                <button class="close-btn" onclick="closeModal('servicios')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>🍽️ Alimentación</h3>
+                <ul>
+                    <li>Desayuno buffet (7:00 a 10:00 hs)</li>
+                    <li>Opciones para celíacos (solicitar en el momento)</li>
+                    <li>Restaurante propio (Cena opcional 20:00 a 23:00 hs - abona aparte)</li>
+                </ul>
+                
+                <h3>🏊 Piscinas y Relax</h3>
+                <ul>
+                    <li>2 piscinas de agua fría (11:00 a 20:00 hs)</li>
+                    <li>Jacuzzi por turnos (8:00 a 20:00 hs)</li>
+                </ul>
+                
+                <h3>💪 Bienestar</h3>
+                <ul>
+                    <li>Gimnasio</li>
+                    <li>Sala de juegos</li>
+                    <li>Plaza blanda para menores de 5 años</li>
+                </ul>
+                
+                <h3>🚗 Otros Servicios</h3>
+                <ul>
+                    <li>WiFi gratuito en todo el hotel</li>
+                    <li>Estacionamiento semi-cubierto (sujeto a disponibilidad)</li>
+                    <li>Recepción 24 horas</li>
+                    <li>Aire acondicionado/calefacción central</li>
+                </ul>
+                
+                <div class="highlight">
+                    🌡️ <strong>Climatización:</strong><br>
+                    • Calefacción: Mayo a Septiembre<br>
+                    • Aire acondicionado: Septiembre a Mayo
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-ubicacion" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📍 Ubicación y Contacto</h2>
+                <button class="close-btn" onclick="closeModal('ubicacion')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>📍 Dirección</h3>
+                <p>Ruta Nacional 14 - Km 264.5<br>
+                Concordia, Entre Ríos, Argentina</p>
+                
+                <h3>📞 Teléfonos</h3>
+                <ul>
+                    <li>Recepción: 03456-4222362 (Int. 305)</li>
+                    <li>WhatsApp: +54 9 3456-4222362</li>
+                    <li>Booking: 0351-5870132</li>
+                </ul>
+                
+                <h3>📧 Emails</h3>
+                <ul>
+                    <li>Reservas: reservasconcordia@hathorhotels.com.ar</li>
+                    <li>Ventas/Corporativo: ventasconcordia@hathorhotels.com.ar</li>
+                </ul>
+                
+                <h3>🌐 Links</h3>
+                <ul>
+                    <li>Web: hathorconcordia.com.ar</li>
+                    <li>Menú restaurante: app.dmenu.io/public/foJwEDVAkaVbqvXfmvRu</li>
+                    <li>Video hotel: <a href="https://www.canva.com/design/DAFlXfQKvUA/_3zu35-dNBjF1Ak6ur0vIQ/watch" target="_blank">Ver video</a></li>
+                </ul>
+                
+                <a href="https://goo.gl/maps/ARsJeCwnkHQ63Fuk7" class="whatsapp-btn" target="_blank" style="background: #4285f4;">
+                    🗺️ Ver en Google Maps
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-pagos" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>💳 Formas de Pago</h2>
+                <button class="close-btn" onclick="closeModal('pagos')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>💵 En el Hotel</h3>
+                <ul>
+                    <li>Efectivo</li>
+                    <li>Código QR (10% descuento)</li>
+                    <li>Tarjetas de débito (10% descuento)</li>
+                    <li>Tarjetas de crédito hasta 3 cuotas sin interés (monto > $130.000)</li>
+                </ul>
+                
+                <h3>💳 Tarjetas Aceptadas</h3>
+                <ul>
+                    <li>Visa</li>
+                    <li>Mastercard</li>
+                    <li>American Express</li>
+                    <li>Tarjetas extranjeras (21% descuento IVA)</li>
+                </ul>
+                
+                <h3>🏦 Datos Bancarios para Transferencia</h3>
+                <div class="highlight">
+                    <strong>Alias:</strong> jujuy.viento.manera<br>
+                    <strong>Razón Social:</strong> Ceibotel SA<br>
+                    <strong>CBU:</strong> 2850358330094193308871<br>
+                    <strong>CUIT:</strong> 30-70763440-1
+                </div>
+                
+                <div class="highlight" style="border-left-color: #dc3545; background: #f8d7da;">
+                    ⚠️ <strong>Importante:</strong> Los depósitos deben hacerse 48hs antes del ingreso y no permiten devoluciones. Tienen validez de 6 meses como saldo a favor.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-condiciones" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📋 Condiciones y Políticas</h2>
+                <button class="close-btn" onclick="closeModal('condiciones')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>🕐 Horarios</h3>
+                <ul>
+                    <li><strong>Check-in:</strong> A partir de las 14:00 hs</li>
+                    <li><strong>Check-out:</strong> 10:00 hs</li>
+                    <li><strong>Late Check-out hasta 15:00:</strong> 30% recargo</li>
+                    <li><strong>Late Check-out hasta 18:00:</strong> 50% recargo</li>
+                    <li>(Sujeto a disponibilidad)</li>
+                </ul>
+                
+                <h3>📝 Para Reservar</h3>
+                <ul>
+                    <li>Datos requeridos: Nombre, apellido, teléfono y email</li>
+                    <li>Garantía necesaria: Datos de tarjeta de crédito o depósito de una noche</li>
+                    <li><strong>NO se realizan reservas sin garantía</strong></li>
+                    <li>La tarjeta es solo garantía, NO se hacen cargos anticipados</li>
+                </ul>
+                
+                <h3>❌ Cancelaciones</h3>
+                <ul>
+                    <li>Sin cargo: Hasta 48hs antes del ingreso (72hs para fines de semana largo)</li>
+                    <li>Debe enviarse por escrito vía mail o WhatsApp</li>
+                    <li><strong>No Show:</strong> Penalidad de una noche</li>
+                </ul>
+                
+                <h3>👶 Política de Niños</h3>
+                <ul>
+                    <li>Mayores de 2 años abonan alojamiento</li>
+                    <li>La habitación debe tener cantidad de camas = cantidad de huéspedes</li>
+                    <li>No hay habitaciones quíntuples (se puede agregar cama extra a cuádruple con espacio reducido)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-checkin" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📝 Check-in Online</h2>
+                <button class="close-btn" onclick="closeModal('checkin')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Ahorrá tiempo al llegar completando tu ficha de ingreso con anticipación.</p>
+                
+                <div class="highlight">
+                    <strong>Beneficios:</strong><br>
+                    • Check-in más rápido en recepción<br>
+                    • Menos espera<br>
+                    • Datos ya registrados en el sistema
+                </div>
+                
+                <h3>📋 Instrucciones para Recepción</h3>
+                <p>Si el huésped dice que ya completó el formulario:</p>
+                <ol>
+                    <li>Ir a la pestaña de registros de formularios</li>
+                    <li>Presionar "Ctrl + F"</li>
+                    <li>Escribir el DNI del huésped</li>
+                    <li>El Excel marcará la fila correspondiente</li>
+                </ol>
+                
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfpeMA_77Vel460EKv_HkCZ7-QTyUwsCJwhmD0sLef4IL3CTg/viewform?usp=header" class="whatsapp-btn" target="_blank" style="background: #4285f4;">
+                    📝 Completar Ficha de Check-in
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(type) {
+            document.getElementById('modal-' + type).style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal(type) {
+            document.getElementById('modal-' + type).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+        
+        // Cerrar con tecla ESC
+        document.onkeydown = function(evt) {
+            evt = evt || window.event;
+            if (evt.keyCode == 27) {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+</body>
+</html>"""
+
+# Guardar el archivo
+with open('/mnt/kimi/output/asistente_hathor.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print("✅ Asistente Virtual creado exitosamente")
+print("\n📁 Archivo guardado en: /mnt/kimi/output/asistente_hathor.html")
+print("\n🚀 Características incluidas:")
+print("   • 7 botones de información con modales interactivos")
+print("   • Botón principal 'QUIERO RESERVAR' con mensaje pre-escrito")
+print("   • Diseño responsive (funciona en celular y computadora)")
+print("   • Animaciones y efectos visuales profesionales")
+print("   • Toda la información del hotel organizada")
